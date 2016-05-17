@@ -29,7 +29,9 @@ public class Teste {
       HWND SetFocus(HWND hWnd);
       boolean ShowWindow(HWND hWnd, int nCmdShow);
 //      boolean BringWindowToTop(HWND hWnd);
-      boolean SetForegroundWindow(HWND hWnd);
+      boolean SetForegroundWindow(HWND hWnd); //ok
+
+      int GetWindowRect(HWND handle, int[] rect); //ok
    }
 
    public static void main(String[] args) {
@@ -81,16 +83,23 @@ public class Teste {
             }
             boolean isWindow = user32.IsWindow(hWnd);
             boolean isWindowVisible = user32.IsWindowVisible(hWnd);
-            if (isWindowVisible && wText.contains("Hold")) {
+            //if (isWindowVisible && wText.contains("Hold")) {
+            if (isWindowVisible && wText.toUpperCase().contains("NOTEPAD")) {
                System.out.println("Found window with text " + hWnd + ", total " + ++count
                        + " Text: " + wText + " IsWindow: " + isWindow);
 
-               System.out.println(user32.ShowWindow(hWnd, 5));
-               System.out.println(user32.SetForegroundWindow(hWnd));
-               /*boolean found = user32.FindWindowEx(hWnd, null, null, null);
-               System.out.println("child: " + found);
+               //System.out.println(user32.ShowWindow(hWnd, 5));
+               //System.out.println(user32.SetForegroundWindow(hWnd));
 
-               System.out.println("");
+               int[] rect = {0, 0, 0, 0};
+               int b = user32.GetWindowRect(hWnd, rect);
+               if (b == 0) {
+                  System.out.println("Ocorreu erro ao obter o GetWindowRect");
+               } else {
+                  System.out.println(String.format("%d %d %d %d", rect[0], rect[1], rect[2], rect[3]));
+               }
+
+               /*System.out.println("");
                user32.EnumChildWindows(hWnd, wndenumproc, null);
                System.out.println("");*/
             }
