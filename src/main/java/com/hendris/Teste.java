@@ -6,17 +6,30 @@ import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.win32.StdCallLibrary;
 import com.sun.jna.platform.win32.WinUser;
+import com.sun.jna.win32.W32APIOptions;
 
 public class Teste {
    public interface User32 extends StdCallLibrary {
-      User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class);
+      //User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class);
+      User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class, W32APIOptions.DEFAULT_OPTIONS);
+
+
       boolean EnumWindows(WinUser.WNDENUMPROC lpEnumFunc, Pointer arg);
       boolean EnumChildWindows(HWND hWnd,WinUser.WNDENUMPROC lpEnumFunc, Pointer arg);
       int GetWindowTextA(HWND hWnd, byte[] lpString, int nMaxCount);
       boolean IsWindow(HWND hWnd);
       boolean IsWindowVisible(HWND hWnd);
 
-      HWND FindWindowEx(HWND hwndParent, HWND hwndChildAfter, byte[] lpszClass, byte[] lpszWindow);
+//      HWND FindWindowEx(HWND hwndParent, HWND hwndChildAfter, byte[] lpszClass, byte[] lpszWindow);
+      boolean FindWindowEx(HWND parent, HWND child, String className, String window);
+
+      int GetClassNameA(HWND in, byte[] lpString, int size);
+      int GetDlgItemText(HWND hDlg, int nIDDlgItem, byte[] lpString, int nMaxCount);
+      int GetDlgCtrlID(HWND hwndCtl);
+      HWND SetFocus(HWND hWnd);
+      boolean ShowWindow(HWND hWnd, int nCmdShow);
+//      boolean BringWindowToTop(HWND hWnd);
+      boolean SetForegroundWindow(HWND hWnd);
    }
 
    public static void main(String[] args) {
@@ -26,14 +39,27 @@ public class Teste {
       final WinUser.WNDENUMPROC wndenumproc = new WinUser.WNDENUMPROC() {
          public boolean callback(HWND hwnd, Pointer pointer) {
             byte[] windowText = new byte[512];
-            user32.GetWindowTextA(hwnd, windowText, 512);
+            user32.GetClassNameA(hwnd, windowText, 512);
+            String className = Native.toString(windowText);
+//            System.out.println("child: " + Native.toString(windowText));
+            if (className.equals("PokerStarsButtonClass")) {
+               System.out.println("child: " + Native.toString(windowText));
+
+               int id = user32.GetDlgCtrlID(hwnd);
+               System.out.println("id: " + id);
+
+               byte[] text = new byte[512];
+               int n = user32.GetDlgItemText(hwnd, 1000, text, 512);
+               System.out.println("n: " + n + ", " + Native.toString(text));
+            }
+            /*user32.GetWindowTextA(hwnd, windowText, 512);
             String wText = Native.toString(windowText);
 
             if (wText.isEmpty()) {
                return true;
             }
 
-            System.out.println("childWindow: " + hwnd + ", Text: " + wText);
+            System.out.println("childWindow: " + hwnd + ", Text: " + wText);*/
 
             return true;
          }
@@ -55,14 +81,16 @@ public class Teste {
             }
             boolean isWindow = user32.IsWindow(hWnd);
             boolean isWindowVisible = user32.IsWindowVisible(hWnd);
-            if (isWindowVisible) {
+            if (isWindowVisible && wText.contains("Hold")) {
                System.out.println("Found window with text " + hWnd + ", total " + ++count
                        + " Text: " + wText + " IsWindow: " + isWindow);
 
-               HWND hwndChild = user32.FindWindowEx(hWnd, null, "Button".getBytes(), "1".getBytes());
-               System.out.println("child: " + hwndChild);
+               System.out.println(user32.ShowWindow(hWnd, 5));
+               System.out.println(user32.SetForegroundWindow(hWnd));
+               /*boolean found = user32.FindWindowEx(hWnd, null, null, null);
+               System.out.println("child: " + found);
 
-               /*System.out.println("");
+               System.out.println("");
                user32.EnumChildWindows(hWnd, wndenumproc, null);
                System.out.println("");*/
             }
