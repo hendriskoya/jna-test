@@ -1,4 +1,4 @@
-package com.hendris;
+package com.hendris.remote;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class KnockKnockServer {
             String inputLine, outputLine;
 
             String jsonTables = new CommProtocol().getJsonTables();
-            Message message = new Message(Commands.GET_TABLE_LIST, jsonTables);
+            Message message = new Message(Message.Type.GET_TABLE_LIST, jsonTables);
             Gson g = new Gson();
             out.println(g.toJson(message));
             

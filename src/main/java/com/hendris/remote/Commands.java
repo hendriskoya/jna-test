@@ -1,4 +1,4 @@
-package com.hendris;
+package com.hendris.remote;
 
 /**
  * Created by hendris on 5/17/16.

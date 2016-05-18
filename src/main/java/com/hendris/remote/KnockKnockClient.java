@@ -1,4 +1,4 @@
-package com.hendris;
+package com.hendris.remote;
 
 import java.io.*;
 import java.net.*;
