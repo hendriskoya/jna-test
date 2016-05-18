@@ -30,4 +30,9 @@ public class Table implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "table [id: " + this.id + ", name: " + name + "]";
+    }
 }

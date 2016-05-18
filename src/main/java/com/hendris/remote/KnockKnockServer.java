@@ -31,13 +31,21 @@ public class KnockKnockServer {
         
             String inputLine, outputLine;
 
-            String jsonTables = new CommProtocol().getJsonTables();
-            Message message = new Message(Message.Type.GET_TABLE_LIST, jsonTables);
+            /*String jsonTables = new CommProtocol().getJsonTables();
+            Message message = new RequestMessage(MessageType.GET_TABLE_LIST, jsonTables);
             Gson g = new Gson();
-            out.println(g.toJson(message));
-            
+            out.println(g.toJson(message));*/
+            out.println("Welcome to Knock!");
+
+            CommProtocol protocol = new CommProtocol();
+            while ((inputLine = in.readLine()) != null) {
+                System.out.println("Request incoming...");
+                outputLine = protocol.processMessage(inputLine);
+                out.println(outputLine);
+            }
+
             // Initiate conversation with client
-            KnockKnockProtocol kkp = new KnockKnockProtocol();
+            /*KnockKnockProtocol kkp = new KnockKnockProtocol();
             outputLine = kkp.processInput(null);
             out.println(outputLine);
 
@@ -46,7 +54,7 @@ public class KnockKnockServer {
                 out.println(outputLine);
                 if (outputLine.equals("Bye."))
                     break;
-            }
+            }*/
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                 + portNumber + " or listening for a connection");

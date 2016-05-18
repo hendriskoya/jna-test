@@ -1,7 +1,11 @@
 package com.hendris.remote;
 
+import com.hendris.Table;
 import java.io.*;
 import java.net.*;
+import java.util.List;
+
+import com.google.gson.Gson;
 
 public class KnockKnockClient {
     public static void main(String[] args) throws IOException {
@@ -28,15 +32,33 @@ public class KnockKnockClient {
             String fromServer;
             String fromUser;
 
+            Gson g = new Gson();
+
             while ((fromServer = in.readLine()) != null) {
                 System.out.println("Server: " + fromServer);
                 if (fromServer.equals("Bye."))
                     break;
+                if (fromServer.startsWith("{")) {
+                    RequestMessage requestMessage = g.fromJson(fromServer, RequestMessage.class);
+                    if (requestMessage.getType() == 1000) {
+                        TableListMessage tableListMessage = g.fromJson(fromServer, TableListMessage.class);
+                        List<Table> tables = tableListMessage.getBody();
+                        for (Table table: tables) {
+                            System.out.println(table);
+                        }
+                    }
+                }
                 
                 fromUser = stdIn.readLine();
                 if (fromUser != null) {
                     System.out.println("Client: " + fromUser);
-                    out.println(fromUser);
+                    if (fromUser.equals(("1000"))) {
+                        Message requestMessage = new RequestMessage(MessageType.GET_TABLE_LIST, "");
+                        String jsonMessage = g.toJson(requestMessage);
+                        out.println(jsonMessage);
+                    } else {
+                        out.println(fromUser);
+                    }
                 }
             }
         } catch (UnknownHostException e) {

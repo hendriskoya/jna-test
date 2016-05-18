@@ -16,13 +16,28 @@ public class CommProtocol {
         System.out.println(jsonTables);
 
         Gson g = new Gson();
-        Message message = new Message(Message.Type.GET_TABLE_LIST, "");
-        String s = g.toJson(message);
-        System.out.println(s);
+        Message requestMessage = new RequestMessage(MessageType.GET_TABLE_LIST, "");
+        String jsonMessage = g.toJson(requestMessage);
+        System.out.println(jsonMessage);
 
-        Message message1 = g.fromJson(s, Message.class);
-        System.out.println(message.getType());
-        System.out.println(message.getBody());
+        String responseMessage = new CommProtocol().processMessage(jsonMessage);
+        System.out.println(responseMessage);
+
+        Message testeMessage = new RequestMessage(MessageType.GET_TABLE_LIST, jsonTables);
+        String s = g.toJson(testeMessage);
+        System.out.println(s);
+        RequestMessage requestMessage1 = g.fromJson(s, RequestMessage.class);
+        System.out.println(requestMessage1.getType());
+        System.out.println(requestMessage1.getBody());
+
+        List<Table> teste = new ArrayList<>();
+
+        List list = g.fromJson(requestMessage1.getBody(), teste.getClass());
+        System.out.println(list);
+
+        /*Message message1 = g.fromJson(jsonMessage, Message.class);
+        System.out.println(requestMessage.getType());
+        System.out.println(requestMessage.getBody());*/
     }
 
     public List<Table> getTables() {
@@ -39,5 +54,19 @@ public class CommProtocol {
     public String getJsonTables() {
         Gson g = new Gson();
         return g.toJson(getTables());
+    }
+
+    private static Gson g = new Gson();
+
+    public String processMessage(String request) {
+        System.out.println("request: " + request);
+        Message message = g.fromJson(request, RequestMessage.class);
+        if (message.getType() == MessageType.GET_TABLE_LIST) {
+            message = new TableListMessage(MessageType.GET_TABLE_LIST, getTables());
+            return g.toJson(message);
+        } else {
+            System.out.println("Tipo não implementado");
+        }
+        return "";
     }
 }
