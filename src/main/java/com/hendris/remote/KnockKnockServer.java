@@ -7,8 +7,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import com.google.gson.Gson;
-
 public class KnockKnockServer {
     public static void main(String[] args) throws IOException {
         
@@ -31,13 +29,13 @@ public class KnockKnockServer {
         
             String inputLine, outputLine;
 
-            /*String jsonTables = new CommProtocol().getJsonTables();
+            /*String jsonTables = new Protocol().getJsonTables();
             Message message = new RequestMessage(MessageType.GET_TABLE_LIST, jsonTables);
             Gson g = new Gson();
             out.println(g.toJson(message));*/
             out.println("Welcome to Knock!");
 
-            CommProtocol protocol = new CommProtocol();
+            Protocol protocol = new Protocol();
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Request incoming...");
                 outputLine = protocol.processMessage(inputLine);

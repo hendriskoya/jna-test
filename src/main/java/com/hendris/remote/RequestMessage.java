@@ -5,6 +5,10 @@ package com.hendris.remote;
  */
 public class RequestMessage extends Message<String> {
 
+    public RequestMessage(int type) {
+        super(type, null);
+    }
+
     public RequestMessage(int type, String body) {
         super(type, body);
     }

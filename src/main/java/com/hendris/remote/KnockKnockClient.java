@@ -39,12 +39,11 @@ public class KnockKnockClient {
                 if (fromServer.equals("Bye."))
                     break;
                 if (fromServer.startsWith("{")) {
-                    RequestMessage requestMessage = g.fromJson(fromServer, RequestMessage.class);
-                    if (requestMessage.getType() == 1000) {
-                        TableListMessage tableListMessage = g.fromJson(fromServer, TableListMessage.class);
-                        List<Table> tables = tableListMessage.getBody();
-                        for (Table table: tables) {
-                            System.out.println(table);
+                    ResponseMessage responseMessage = g.fromJson(fromServer, ResponseMessage.class);
+                    if (responseMessage.getType() == MessageType.GET_TABLE_LIST) {
+                        TableListBody tableListBody = g.fromJson(responseMessage.getBody(), TableListBody.class);
+                        for (Table table: tableListBody.getTables()) {
+                            System.out.println(table.toString());
                         }
                     }
                 }
