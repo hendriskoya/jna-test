@@ -1,40 +1,65 @@
-package com.hendris;
+package com.hendris.winapi;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
-import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.win32.StdCallLibrary;
 import com.sun.jna.platform.win32.WinUser;
-import com.sun.jna.win32.W32APIOptions;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Teste {
-   public interface User32 extends StdCallLibrary {
-      //User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class);
-      User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class, W32APIOptions.DEFAULT_OPTIONS);
+public class WinAPI {
 
-
-      boolean EnumWindows(WinUser.WNDENUMPROC lpEnumFunc, Pointer arg);
-      boolean EnumChildWindows(HWND hWnd,WinUser.WNDENUMPROC lpEnumFunc, Pointer arg);
-      int GetWindowTextA(HWND hWnd, byte[] lpString, int nMaxCount);
-      boolean IsWindow(HWND hWnd);
-      boolean IsWindowVisible(HWND hWnd);
-
-//      HWND FindWindowEx(HWND hwndParent, HWND hwndChildAfter, byte[] lpszClass, byte[] lpszWindow);
-      boolean FindWindowEx(HWND parent, HWND child, String className, String window);
-
-      int GetClassNameA(HWND in, byte[] lpString, int size);
-      int GetDlgItemText(HWND hDlg, int nIDDlgItem, byte[] lpString, int nMaxCount);
-      int GetDlgCtrlID(HWND hwndCtl);
-      HWND SetFocus(HWND hWnd);
-      boolean ShowWindow(HWND hWnd, int nCmdShow);
-//      boolean BringWindowToTop(HWND hWnd);
-      boolean SetForegroundWindow(HWND hWnd); //ok
-
-      int GetWindowRect(HWND handle, int[] rect); //ok
-   }
+   private final String username = "jimmyhendris";
 
    public static void main(String[] args) {
+      WinAPI winAPI = new WinAPI();
+      List<Window> windows = winAPI.loadWindows();
+      for (Window window: windows) {
+         System.out.println(window);
+      }
+   }
+
+   private final User32 user32 = User32.INSTANCE;
+
+   public List<Window> loadWindows() {
+      List<Window> windows = new ArrayList<>();
+      user32.EnumWindows(new WinUser.WNDENUMPROC() {
+         int count = 0;
+
+         public boolean callback(HWND hWnd, Pointer lParam) {
+            byte[] windowText = new byte[512];
+            user32.GetWindowTextA(hWnd, windowText, 512);
+            String wText = Native.toString(windowText);
+
+            // get rid of this if block if you want all windows regardless of whether
+            // or not they have text
+            if (wText.isEmpty()) {
+               return true;
+            }
+            boolean isWindowVisible = user32.IsWindowVisible(hWnd);
+            if (isWindowVisible && wText.contains(username)) {
+               System.out.println("Found window with text " + hWnd + ", total " + ++count
+                       + " Text: " + wText);
+
+               int[] rect = {0, 0, 0, 0};
+               int b = user32.GetWindowRect(hWnd, rect);
+               if (b == 0) {
+                  System.out.println("Ocorreu erro ao obter o GetWindowRect");
+               } else {
+                  System.out.println(String.format("%d %d %d %d", rect[0], rect[1], rect[2], rect[3]));
+               }
+
+               windows.add(new Window(wText, hWnd, rect));
+            }
+            return true;
+         }
+      }, null);
+      return windows;
+   }
+
+
+
+   public void teste() {
       System.out.println("init main");
       final User32 user32 = User32.INSTANCE;
 
@@ -83,7 +108,7 @@ public class Teste {
             }
             boolean isWindow = user32.IsWindow(hWnd);
             boolean isWindowVisible = user32.IsWindowVisible(hWnd);
-            //if (isWindowVisible && wText.contains("Hold")) {
+//            if (isWindowVisible && wText.contains(username)) {
             if (isWindowVisible && wText.toUpperCase().contains("NOTEPAD")) {
                System.out.println("Found window with text " + hWnd + ", total " + ++count
                        + " Text: " + wText + " IsWindow: " + isWindow);
@@ -106,9 +131,5 @@ public class Teste {
             return true;
          }
       }, null);
-
-
-
-      //user32.
    }
 }

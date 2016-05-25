@@ -1,4 +1,4 @@
-package com.hendris;
+package com.hendris.japi;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

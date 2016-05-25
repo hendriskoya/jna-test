@@ -1,9 +1,8 @@
-package com.hendris;
+package com.hendris.japi;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.mouse.NativeMouseEvent;
-import org.jnativehook.mouse.NativeMouseInputListener;
 import org.jnativehook.mouse.NativeMouseListener;
 
 public class GlobalMouseListenerExample implements NativeMouseListener {

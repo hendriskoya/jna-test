@@ -9,7 +9,10 @@ import java.net.Socket;
 
 public class KnockKnockServer {
     public static void main(String[] args) throws IOException {
-        
+        new KnockKnockServer();
+    }
+
+    public KnockKnockServer() {
         /*if (args.length != 1) {
             System.err.println("Usage: java KnockKnockServer <port number>");
             System.exit(1);
@@ -22,25 +25,20 @@ public class KnockKnockServer {
                 ServerSocket serverSocket = new ServerSocket(portNumber);
                 Socket clientSocket = serverSocket.accept();
                 PrintWriter out =
-                new PrintWriter(clientSocket.getOutputStream(), true);
+                        new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(
-                new InputStreamReader(clientSocket.getInputStream()));
+                        new InputStreamReader(clientSocket.getInputStream()));
         ) {
-        
+
             String inputLine, outputLine;
 
-            /*String jsonTables = new Protocol().getJsonTables();
+            /*String jsonTables = new Engine().getJsonTables();
             Message message = new RequestMessage(MessageType.GET_TABLE_LIST, jsonTables);
             Gson g = new Gson();
             out.println(g.toJson(message));*/
             out.println("Welcome to Knock!");
 
-            Protocol protocol = new Protocol();
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println("Request incoming...");
-                outputLine = protocol.processMessage(inputLine);
-                out.println(outputLine);
-            }
+            listen(out, in);
 
             // Initiate conversation with client
             /*KnockKnockProtocol kkp = new KnockKnockProtocol();
@@ -55,8 +53,18 @@ public class KnockKnockServer {
             }*/
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
-                + portNumber + " or listening for a connection");
+                    + portNumber + " or listening for a connection");
             System.out.println(e.getMessage());
+        }
+    }
+
+    private void listen(PrintWriter out, BufferedReader in) throws IOException {
+        String inputLine;
+        String outputLine;Engine protocol = new Engine();
+        while ((inputLine = in.readLine()) != null) {
+            System.out.println("Request incoming...");
+            outputLine = protocol.processMessage(inputLine);
+            out.println(outputLine);
         }
     }
 }
