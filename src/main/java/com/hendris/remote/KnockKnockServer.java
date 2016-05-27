@@ -12,6 +12,8 @@ public class KnockKnockServer {
         new KnockKnockServer();
     }
 
+    private Engine protocol = new Engine();
+
     public KnockKnockServer() {
         /*if (args.length != 1) {
             System.err.println("Usage: java KnockKnockServer <port number>");
@@ -60,7 +62,7 @@ public class KnockKnockServer {
 
     private void listen(PrintWriter out, BufferedReader in) throws IOException {
         String inputLine;
-        String outputLine;Engine protocol = new Engine();
+        String outputLine;
         while ((inputLine = in.readLine()) != null) {
             System.out.println("Request incoming...");
             outputLine = protocol.processMessage(inputLine);

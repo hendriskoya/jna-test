@@ -26,6 +26,10 @@ public class Window {
         return caption;
     }
 
+    public HWND getHandle() {
+        return hWnd;
+    }
+
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();

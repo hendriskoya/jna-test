@@ -4,24 +4,51 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinUser;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 public class WinAPI {
 
    private final String username = "jimmyhendris";
 
    public static void main(String[] args) {
-      WinAPI winAPI = new WinAPI();
+      /*WinAPI winAPI = new WinAPI();
       List<Window> windows = winAPI.loadWindows();
       for (Window window: windows) {
          System.out.println(window);
-      }
+      }*/
+      WinAPI instance = WinAPI.INSTANCE;
    }
+
+   public static final WinAPI INSTANCE = new WinAPI();
 
    private final User32 user32 = User32.INSTANCE;
 
-   public List<Window> loadWindows() {
+   private Map<HWND, Window> windowsMap = new HashMap<>();
+
+   public WinAPI() {
+      prepareWindows();
+   }
+
+   private void prepareWindows() {
+      //TODO Incluir tratamento para remover do map as janelas não existentes.
+      //TODO Incluir tratamento para atualizar map com novos windows.
+      List<Window> windows = loadWindows();
+      for (Window window: windows) {
+         windowsMap.put(window.getHandle(), window);
+         System.out.println(showWindow(window));
+      }
+   }
+
+   public Collection<Window> getLoadedWindows() {
+      return windowsMap.values();
+   }
+
+   public boolean showWindow(Window window) {
+      return user32.SetForegroundWindow(window.getHandle());
+   }
+
+   private List<Window> loadWindows() {
       List<Window> windows = new ArrayList<>();
       user32.EnumWindows(new WinUser.WNDENUMPROC() {
          int count = 0;
@@ -40,6 +67,8 @@ public class WinAPI {
             if (isWindowVisible && wText.contains(username)) {
                System.out.println("Found window with text " + hWnd + ", total " + ++count
                        + " Text: " + wText);
+
+//               System.out.println(user32.SetForegroundWindow(hWnd));
 
                int[] rect = {0, 0, 0, 0};
                int b = user32.GetWindowRect(hWnd, rect);

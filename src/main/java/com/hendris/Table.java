@@ -4,6 +4,7 @@ import com.hendris.winapi.Window;
 import com.sun.jna.platform.win32.Guid;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -41,7 +42,7 @@ public class Table implements Serializable {
         return "table [id: " + this.id + ", name: " + name + "]";
     }
 
-    public static List<Table> fromWindows(List<Window> windows) {
+    public static List<Table> fromWindows(Collection<Window> windows) {
         List<Table> tables = new ArrayList<>();
 
         for (Window window: windows) {

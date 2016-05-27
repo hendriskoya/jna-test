@@ -34,6 +34,8 @@ public class KnockKnockClient {
 
             Gson g = new Gson();
 
+            Table tableTest = null;
+
             while ((fromServer = in.readLine()) != null) {
                 System.out.println("Server: " + fromServer);
                 if (fromServer.equals("Bye."))
@@ -45,6 +47,17 @@ public class KnockKnockClient {
                         for (Table table: tableListBody.getTables()) {
                             System.out.println(table.toString());
                         }
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        tableTest = tableListBody.getTables().get(0);
+                        /*Message requestMessage = new RequestMessage(MessageType.SHOW_WINDOW, g.toJson(table));
+                        String jsonMessage = g.toJson(requestMessage);
+                        out.println(jsonMessage);*/
+                    } else if (responseMessage.getType() == MessageType.SHOW_WINDOW) {
+                        System.out.println(responseMessage.getBody());
                     }
                 }
                 
@@ -53,6 +66,10 @@ public class KnockKnockClient {
                     System.out.println("Client: " + fromUser);
                     if (fromUser.equals(("1000"))) {
                         Message requestMessage = new RequestMessage(MessageType.GET_TABLE_LIST, "");
+                        String jsonMessage = g.toJson(requestMessage);
+                        out.println(jsonMessage);
+                    } else if (fromUser.equals("2000")) {
+                        Message requestMessage = new RequestMessage(MessageType.SHOW_WINDOW, g.toJson(tableTest));
                         String jsonMessage = g.toJson(requestMessage);
                         out.println(jsonMessage);
                     } else {
