@@ -9,7 +9,7 @@ import java.util.*;
 
 public class WinAPI {
 
-   private final String username = "jimmyhendris";
+   private static String username = "Notepad";
 
    public static void main(String[] args) {
       /*WinAPI winAPI = new WinAPI();
@@ -17,6 +17,9 @@ public class WinAPI {
       for (Window window: windows) {
          System.out.println(window);
       }*/
+      if (args.length > 0) {
+         username = args[0];
+      }
       WinAPI instance = WinAPI.INSTANCE;
    }
 
@@ -36,7 +39,7 @@ public class WinAPI {
       List<Window> windows = loadWindows();
       for (Window window: windows) {
          windowsMap.put(window.getHandle(), window);
-         System.out.println(showWindow(window));
+         //System.out.println(showWindow(window));
       }
    }
 

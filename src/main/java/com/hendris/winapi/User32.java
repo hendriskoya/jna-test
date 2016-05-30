@@ -5,6 +5,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinUser;
 import com.sun.jna.platform.win32.WinUser.WNDENUMPROC;
+import com.sun.jna.ptr.PointerByReference;
 import com.sun.jna.win32.StdCallLibrary;
 import com.sun.jna.win32.W32APIOptions;
 
@@ -31,4 +32,15 @@ public interface User32 extends StdCallLibrary, WinUser {
       boolean SetForegroundWindow(HWND hWnd); //ok
 
       int GetWindowRect(HWND handle, int[] rect); //ok
+
+      HWND GetForegroundWindow();
+      int GetWindowThreadProcessId(HWND hWnd, PointerByReference lpdwProcessId);
+      boolean BringWindowToTop(HWND hWnd);
+      boolean AttachThreadInput(DWORD idAttach, DWORD idAttachTo, boolean fAttach);
+      boolean IsIconic(HWND hWnd);
+      boolean SystemParametersInfo(int uiAction, int uiParam, PointerByReference pvParam, int fWinIni);
+
+      int SPI_GETFOREGROUNDLOCKTIMEOUT = 0x2000;
+      int SPI_SETFOREGROUNDLOCKTIMEOUT = 0x2001;
+      int SPIF_SENDCHANGE = 2;
    }
