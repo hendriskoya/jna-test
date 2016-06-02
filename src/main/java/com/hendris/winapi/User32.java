@@ -40,7 +40,16 @@ public interface User32 extends StdCallLibrary, WinUser {
       boolean IsIconic(HWND hWnd);
       boolean SystemParametersInfo(int uiAction, int uiParam, PointerByReference pvParam, int fWinIni);
 
+      boolean SetWindowPos(HWND var1, HWND var2, int var3, int var4, int var5, int var6, int var7);
+
+      HWND SetActiveWindow(HWND hWnd);
+
+      HWND FindWindow(String var1, String var2);
+
       int SPI_GETFOREGROUNDLOCKTIMEOUT = 0x2000;
       int SPI_SETFOREGROUNDLOCKTIMEOUT = 0x2001;
       int SPIF_SENDCHANGE = 2;
+      int SWP_SHOWWINDOW = 0x0040;
+      int SWP_NOSIZE = 0x0001;
+      int SWP_NOMOVE = 0x0002;
    }
