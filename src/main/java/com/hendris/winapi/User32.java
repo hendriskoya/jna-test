@@ -1,10 +1,10 @@
 package com.hendris.winapi;
 
+import com.sun.jna.Callback;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
-import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinUser;
-import com.sun.jna.platform.win32.WinUser.WNDENUMPROC;
 import com.sun.jna.ptr.PointerByReference;
 import com.sun.jna.win32.StdCallLibrary;
 import com.sun.jna.win32.W32APIOptions;
@@ -52,4 +52,17 @@ public interface User32 extends StdCallLibrary, WinUser {
       int SWP_SHOWWINDOW = 0x0040;
       int SWP_NOSIZE = 0x0001;
       int SWP_NOMOVE = 0x0002;
-   }
+
+      WinNT.HANDLE SetWinEventHook(int eventMin, int eventMax, HMODULE hmodWinEventProc, WinEventProc winEventProc,
+                                   int processID, int threadID, int flags);
+
+      boolean UnhookWinEvent(WinNT.HANDLE handle);
+
+      boolean PeekMessage(MSG var1, HWND var2, int var3, int var4, int var5);
+
+    public static interface WinEventProc extends Callback {
+        void callback(WinNT.HANDLE hWinEventHook, DWORD event, HWND hwnd, LONG idObject, LONG idChild,
+                DWORD dwEventThread,
+                DWORD dwmsEventTime);
+    }
+}
