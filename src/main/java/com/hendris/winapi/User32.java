@@ -37,10 +37,12 @@ public interface User32 extends StdCallLibrary, WinUser {
       int GetWindowThreadProcessId(HWND hWnd, PointerByReference lpdwProcessId);
       boolean BringWindowToTop(HWND hWnd);
       boolean AttachThreadInput(DWORD idAttach, DWORD idAttachTo, boolean fAttach);
+      //boolean AttachThreadInput(int idAttach, int idAttachTo, boolean fAttach);
+
       boolean IsIconic(HWND hWnd);
       boolean SystemParametersInfo(int uiAction, int uiParam, PointerByReference pvParam, int fWinIni);
 
-      boolean SetWindowPos(HWND var1, HWND var2, int var3, int var4, int var5, int var6, int var7);
+      boolean SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
 
       HWND SetActiveWindow(HWND hWnd);
 
@@ -48,7 +50,10 @@ public interface User32 extends StdCallLibrary, WinUser {
 
       int SPI_GETFOREGROUNDLOCKTIMEOUT = 0x2000;
       int SPI_SETFOREGROUNDLOCKTIMEOUT = 0x2001;
+
       int SPIF_SENDCHANGE = 2;
+      int SPIF_UPDATEINIFILE = 0x01;
+
       int SWP_SHOWWINDOW = 0x0040;
       int SWP_NOSIZE = 0x0001;
       int SWP_NOMOVE = 0x0002;
@@ -65,4 +70,6 @@ public interface User32 extends StdCallLibrary, WinUser {
                 DWORD dwEventThread,
                 DWORD dwmsEventTime);
     }
+
+      boolean AllowSetForegroundWindow(int dwProcessId);
 }
