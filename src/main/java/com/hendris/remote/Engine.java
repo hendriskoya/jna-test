@@ -27,6 +27,12 @@ public class Engine {
             return g.toJson(responseMessage);
         } else if (message.getType() == MessageType.SHOW_WINDOW) {
             return showWindowCommand(message);
+        } else if (message.getType() == MessageType.FOLD) {
+            return foldCommand(message);
+        } else if (message.getType() == MessageType.CHECK) {
+            return checkCommand(message);
+        } else if (message.getType() == MessageType.RAISE) {
+            return raiseCommand(message);
         } else {
             System.out.println("Tipo não implementado");
         }
@@ -35,6 +41,13 @@ public class Engine {
 
     private String showWindowCommand(RequestMessage message) {
         Table table = g.fromJson(message.getBody(), Table.class);
+        boolean success = findWindowAndShow(table);
+        ExecutedBody executedBody = new ExecutedBody(success);
+        ResponseMessage responseMessage = new ResponseMessage(MessageType.SHOW_WINDOW, g.toJson(executedBody));
+        return g.toJson(responseMessage);
+    }
+
+    private boolean findWindowAndShow(Table table) {
         Collection<Window> windows = wApi.getLoadedWindows();
         boolean success = false;
         for (Window window: windows) {
@@ -43,8 +56,25 @@ public class Engine {
                 break;
             }
         }
+        return success;
+    }
+
+    private String foldCommand(RequestMessage message) {
+        FoldCommand foldCommand = g.fromJson(message.getBody(), FoldCommand.class);
+        boolean success = findWindowAndShow(foldCommand.getTable());
+        if (success) {
+
+        }
         ExecutedBody executedBody = new ExecutedBody(success);
-        ResponseMessage responseMessage = new ResponseMessage(MessageType.SHOW_WINDOW, g.toJson(executedBody));
+        ResponseMessage responseMessage = new ResponseMessage(MessageType.FOLD, g.toJson(executedBody));
         return g.toJson(responseMessage);
+    }
+
+    private String checkCommand(RequestMessage message) {
+        return null;
+    }
+
+    private String raiseCommand(RequestMessage message) {
+        return null;
     }
 }

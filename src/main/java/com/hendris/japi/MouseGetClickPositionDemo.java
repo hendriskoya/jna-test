@@ -7,8 +7,14 @@ import org.jnativehook.NativeHookException;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseListener;
 
-public class MouseClickDemo implements NativeMouseListener {
+public class MouseGetClickPositionDemo implements NativeMouseListener {
 
+	/**
+	 * Esse código será utilizado para mapear as posições dos botões
+	 * quando o usuário for criar o profile de jogo
+	 * @param args
+	 * @throws InterruptedException
+     */
 	public static void main(String[] args) throws InterruptedException {
 		Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
 		logger.setLevel(Level.WARNING);
@@ -19,7 +25,7 @@ public class MouseClickDemo implements NativeMouseListener {
 
 			System.exit(1);
 		}
-		GlobalScreen.addNativeMouseListener(new MouseClickDemo());
+		GlobalScreen.addNativeMouseListener(new MouseGetClickPositionDemo());
 
 		Thread.sleep(1000);
 		NativeMouseEvent me = new  NativeMouseEvent(

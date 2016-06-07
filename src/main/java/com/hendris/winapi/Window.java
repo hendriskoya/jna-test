@@ -10,12 +10,14 @@ public class Window {
     private final String caption;
     private final HWND hWnd;
     private final int[] rect;
+    private final Actions actions;
 
-    public Window(String caption, HWND hWnd, int[] rect) {
+    public Window(String caption, HWND hWnd, int[] rect, Actions actions) {
         this.id = Util.generateId();
         this.caption = caption;
         this.hWnd = hWnd;
         this.rect = rect;
+        this.actions = actions;
     }
 
     public String getId() {

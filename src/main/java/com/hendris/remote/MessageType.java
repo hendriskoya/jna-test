@@ -9,4 +9,8 @@ public class MessageType {
 
     public static final int SHOW_WINDOW = 2000;
 
+    public static final int FOLD = 3000;
+    public static final int CHECK = 3001;
+    public static final int RAISE = 3002;
+
 }
