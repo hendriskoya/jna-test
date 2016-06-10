@@ -10,7 +10,7 @@ import java.util.*;
 
 public class WinAPI {
 
-   private static String username = "Notepad";
+   private static String username = "Calculator";
 
    public static void main(String[] args) {
       /*WinAPI winAPI = new WinAPI();

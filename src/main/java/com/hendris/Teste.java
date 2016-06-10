@@ -51,7 +51,7 @@ public class Teste {
 
     private static boolean mostrarWindow2() {
 
-        HWND hWnd = user32.FindWindow(null, "New Text Document - Notepad");
+        HWND hWnd = user32.FindWindow(null, "Calculator");
         if (hWnd == null) {
             System.out.println("hWnd is null");
             return false;

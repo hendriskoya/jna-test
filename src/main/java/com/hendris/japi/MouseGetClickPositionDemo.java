@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+
+import com.hendris.winapi.*;
+import com.hendris.winapi.Window;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.mouse.NativeMouseEvent;
@@ -35,20 +38,32 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 	public void nativeMousePressed(NativeMouseEvent e) {
 		System.out.println(e.getX());
 		System.out.println(e.getY());
-		if (selectedField != null) {
-			selectedField.setText("" + e.getX() + ", " + e.getY());
-			selectedField = null;
+		if (xField != null) {
+			xField.setText("" + e.getX());
+			xField = null;
+		}
+		if (yField != null) {
+			yField.setText("" + e.getY());
+			yField = null;
 		}
 	}
 
 	public void nativeMouseReleased(NativeMouseEvent arg0) {
 	}
 
+	private WinAPI winAPI = WinAPI.INSTANCE;
+
 	public MouseGetClickPositionDemo() {
 		try {
 			start();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+
+		Window window;
+
+		if (!winAPI.getLoadedWindows().isEmpty()) {
+			window = winAPI.getLoadedWindows().iterator().next();
 		}
 
 		JFrame frame = new JFrame();
@@ -61,22 +76,28 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 		frame.setVisible(true);
 	}
 
-	private JTextField selectedField;
+	private JTextField xField, yField;
 
 	public void addComponents(JFrame frame) {
 		Container container = frame.getContentPane();
-		GridLayout gridLayout = new GridLayout(0, 2);
+		GridLayout gridLayout = new GridLayout(0, 3);
 		container.setLayout(gridLayout);
 
-		JTextField field1 = new JTextField();
-		JTextField field2 = new JTextField();
-		JTextField field3 = new JTextField();
+		JTextField field1x = new JTextField();
+		JTextField field1y = new JTextField();
+
+		JTextField field2x = new JTextField();
+		JTextField field2y = new JTextField();
+
+		JTextField field3x = new JTextField();
+		JTextField field3y = new JTextField();
 
 		JButton botao1 = new JButton("Botão 1");
 		botao1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				selectedField = field1;
+				xField = field1x;
+				yField = field1y;
 			}
 		});
 
@@ -84,7 +105,8 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 		botao2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				selectedField = field2;
+				xField = field2x;
+				yField = field2y;
 			}
 		});
 
@@ -92,21 +114,33 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 		botao3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				selectedField = field3;
+				xField = field3x;
+				yField = field3y;
 			}
 		});
 
 
 		container.add(botao1);
-		container.add(field1);
+		container.add(field1x);
+		container.add(field1y);
 
 
 		container.add(botao2);
-		container.add(field2);
+		container.add(field2x);
+		container.add(field2y);
 
 		container.add(botao3);
-		container.add(field3);
+		container.add(field3x);
+		container.add(field3y);
 
+		JButton btnGerar = new JButton("Gerar");
+		btnGerar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		container.add(btnGerar);
 	}
 
 	public void start() throws InterruptedException {
