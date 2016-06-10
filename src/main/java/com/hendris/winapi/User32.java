@@ -24,8 +24,10 @@ public interface User32 extends StdCallLibrary, WinUser {
       boolean FindWindowEx(HWND parent, HWND child, String className, String window);
 
       int GetClassNameA(HWND in, byte[] lpString, int size);
-      int GetDlgItemText(HWND hDlg, int nIDDlgItem, byte[] lpString, int nMaxCount);
+      int GetDlgItemTextA(HWND hDlg, int nIDDlgItem, byte[] lpString, int nMaxCount);
       int GetDlgCtrlID(HWND hwndCtl);
+      HWND GetDlgItem(HWND hDlg, int nIDDlgItem);
+
       HWND SetFocus(HWND hWnd);
       boolean ShowWindow(HWND hWnd, int nCmdShow);
 //      boolean BringWindowToTop(HWND hWnd);
