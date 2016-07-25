@@ -8,7 +8,7 @@ import com.sun.jna.platform.win32.WinNT;
 /**
  * Created by hendris on 6/2/16.
  */
-public class Teste2 {
+public class ListenForegroundWindow {
 
     public static User32.HHOOK hHook;
     public static User32.LowLevelKeyboardProc lpfn;

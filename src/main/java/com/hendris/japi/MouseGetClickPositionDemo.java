@@ -92,6 +92,15 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 		JTextField field3x = new JTextField();
 		JTextField field3y = new JTextField();
 
+		JLabel profileLabel = new JLabel("Profile:");
+		JTextField profileField = new JTextField();
+
+		JLabel tableLabel = new JLabel("Table:");
+		JTextField size1Field = new JTextField();
+		JTextField size2Field = new JTextField();
+		JTextField size3Field = new JTextField();
+		JTextField size4Field = new JTextField();
+
 		JButton botao1 = new JButton("Botão 1");
 		botao1.addActionListener(new ActionListener() {
 			@Override
@@ -119,6 +128,17 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 			}
 		});
 
+		container.add(profileLabel);
+		container.add(profileField);
+		container.add(new JLabel());
+
+		container.add(tableLabel);
+		container.add(size1Field);
+		container.add(size2Field);
+
+		container.add(new JLabel());
+		container.add(size3Field);
+		container.add(size4Field);
 
 		container.add(botao1);
 		container.add(field1x);
