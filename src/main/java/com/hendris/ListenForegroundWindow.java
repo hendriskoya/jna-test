@@ -5,6 +5,8 @@ import com.sun.jna.platform.win32.Kernel32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
 
+import java.util.List;
+
 /**
  * Created by hendris on 6/2/16.
  */
@@ -14,11 +16,17 @@ public class ListenForegroundWindow {
     public static User32.LowLevelKeyboardProc lpfn;
     public static volatile boolean quit = false;
 
+    private final User32 user32 = User32.INSTANCE;
+
     public static void main(String[] args) throws InterruptedException {
-        listenForegroundWindow();
+        new ListenForegroundWindow();
     }
 
-    private static void listenForegroundWindow() throws InterruptedException {
+    public ListenForegroundWindow() throws InterruptedException {
+        init();
+    }
+
+    private void init() throws InterruptedException {
         /*WinDef.HMODULE hMod = Kernel32.INSTANCE.GetModuleHandle(null);
         lpfn = new User32.LowLevelKeyboardProc() {
             public WinDef.LRESULT callback(int nCode, WinDef.WPARAM wParam,
@@ -47,6 +55,14 @@ public class ListenForegroundWindow {
             @Override
             public void callback(WinNT.HANDLE hWinEventHook, WinDef.DWORD event, WinDef.HWND hwnd, WinDef.LONG idObject, WinDef.LONG idChild, WinDef.DWORD dwEventThread, WinDef.DWORD dwmsEventTime) {
                 System.out.println("passou pelo callback");
+                System.out.println(hwnd);
+                int[] rect = new int[4];
+                user32.GetWindowRect(hwnd, rect);
+                System.out.println(
+                    "left   [0]: " + rect[0] + "\n" +
+                    "top    [1]: " + rect[1] + "\n" +
+                    "right  [2]: " + rect[2] + "\n" +
+                    "bottom [3]: " + rect[3]);
             }
         };
 
@@ -56,7 +72,7 @@ public class ListenForegroundWindow {
 
         User32.MSG msg = new User32.MSG();
         int count = 0;
-        while (count < 100) {
+        while (count < 1000) {
             User32.INSTANCE.PeekMessage(msg, null, 0, 0, 0);
             Thread.sleep(100);
             count++;

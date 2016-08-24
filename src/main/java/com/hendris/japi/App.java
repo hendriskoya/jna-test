@@ -14,7 +14,7 @@ import org.jnativehook.NativeHookException;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseListener;
 
-public class MouseGetClickPositionDemo implements NativeMouseListener {
+public class App implements NativeMouseListener {
 
 	/**
 	 * Esse código será utilizado para mapear as posições dos botões
@@ -26,7 +26,7 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new MouseGetClickPositionDemo();
+				new App();
 			}
 		});
 	}
@@ -46,14 +46,17 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 			yField.setText("" + e.getY());
 			yField = null;
 		}
+
+		System.out.println(user32.GetForegroundWindow());
 	}
 
 	public void nativeMouseReleased(NativeMouseEvent arg0) {
 	}
 
+	private final User32 user32 = User32.INSTANCE;
 	private WinAPI winAPI = WinAPI.INSTANCE;
 
-	public MouseGetClickPositionDemo() {
+	public App() {
 		try {
 			start();
 		} catch (InterruptedException e) {
@@ -101,7 +104,7 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 		JTextField size3Field = new JTextField();
 		JTextField size4Field = new JTextField();
 
-		JButton botao1 = new JButton("Botão 1");
+		JButton botao1 = new JButton("Capturar Fold");
 		botao1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -110,7 +113,7 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 			}
 		});
 
-		JButton botao2 = new JButton("Botão 2");
+		JButton botao2 = new JButton("Capturar Check");
 		botao2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -119,7 +122,7 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 			}
 		});
 
-		JButton botao3 = new JButton("Botão 3");
+		JButton botao3 = new JButton("Capturar Raise");
 		botao3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -173,7 +176,7 @@ public class MouseGetClickPositionDemo implements NativeMouseListener {
 
 			System.exit(1);
 		}
-		//GlobalScreen.addNativeMouseListener(new MouseGetClickPositionDemo());
+		//GlobalScreen.addNativeMouseListener(new App());
 		GlobalScreen.addNativeMouseListener(this);
 
 		Thread.sleep(1000);
